@@ -158,8 +158,7 @@ class Cuenta {
     public double consultarSaldo() {
         return saldo;
     }
-
-    public void retirarDinero(double cantidad) {
+ public void retirarDinero(double cantidad) {
         if (cantidad > 0 && cantidad <= saldo) {
             saldo -= cantidad;
             System.out.println("Retiro exitoso. Saldo restante: $" + saldo);
@@ -174,6 +173,53 @@ class Cuenta {
             System.out.println("Depósito exitoso. Saldo actual: $" + saldo);
         } else {
             System.out.println("Error al depositar dinero. Verifique el monto ingresado.");
+        }
+    }
+}
+//EJERCICIO 3 ANALIZADOR
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class AnalizadorDeTexto {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Ingrese el texto o proporcione la ruta de un archivo:");
+
+        String input = scanner.nextLine();
+        scanner.close();
+
+        Map<String, Integer> frecuenciaPalabras = analizarTexto(input);
+        mostrarEstadisticas(frecuenciaPalabras);
+    }
+
+    private static Map<String, Integer> analizarTexto(String input) {
+        Map<String, Integer> frecuenciaPalabras = new HashMap<>();
+
+        // Dividir el texto en palabras y contar su frecuencia
+        String[] palabras = input.split("\\s+");
+        for (String palabra : palabras) {
+            palabra = palabra.toLowerCase().replaceAll("[^a-zA-Z]", ""); // Convertir a minúsculas y eliminar caracteres no alfabéticos
+            frecuenciaPalabras.put(palabra, frecuenciaPalabras.getOrDefault(palabra, 0) + 1);
+        }
+
+        return frecuenciaPalabras;
+    }
+
+    private static void mostrarEstadisticas(Map<String, Integer> frecuenciaPalabras) {
+        System.out.println("Estadísticas del texto:");
+        System.out.println("Número total de palabras: " + frecuenciaPalabras.size());
+
+        int sumaLongitudes = frecuenciaPalabras.keySet().stream().mapToInt(String::length).sum();
+        double longitudPromedio = (double) sumaLongitudes / frecuenciaPalabras.size();
+        System.out.printf("Longitud promedio de las palabras: %.2f%n", longitudPromedio);
+
+        System.out.println("Frecuencia de cada palabra:");
+        for (Map.Entry<String, Integer> entry : frecuenciaPalabras.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
         }
     }
 }
